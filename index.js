@@ -32,6 +32,18 @@ app.get('/video', function (req, res) {
 
   const videoStream = fs.createReadStream(videoPath, { start, end });
 
+  videoStream.on('data', (chunk) => {
+    console.log(`Received ${chunk.length} bytes of data.`);
+  });
+
+  videoStream.on('end', () => {
+    console.log('Finished reading file.');
+  });
+
+  videoStream.on('error', (err) => {
+    console.error('Error reading file:', err);
+  });
+
   videoStream.pipe(res);
 });
 
